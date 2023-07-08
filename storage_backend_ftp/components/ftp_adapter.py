@@ -42,7 +42,8 @@ def ftp_mkdirs(client, path):
 
 
 class ImplicitFTPTLS(ftplib.FTP_TLS):
-    """FTP_TLS subclass that automatically wraps sockets in SSL to support implicit FTPS."""
+    """FTP_TLS subclass that automatically wraps sockets in SSL
+    to support implicit FTPS."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -70,7 +71,8 @@ def ftp(backend):
             ftp = ftplib.FTP()
         elif backend.ftp_encryption == "tls":
             ftp = ImplicitFTPTLS()
-            # Due to a bug into between ftplib and ssl, this part (about ssl) might not work!
+            # Due to a bug into between ftplib and ssl, this
+            # part (about ssl) might not work!
             # https://bugs.python.org/issue31727
             security = FTP_SECURITY_TO_PROTOCOL.get(backend.ftp_security, None)
             prot_p = True

@@ -40,6 +40,7 @@ def ftp_mkdirs(client, path):
         else:
             raise  # pragma: no cover
 
+
 class Explicit_FTP_TLS(ftplib.FTP_TLS):
     """Explicit FTPS, with shared TLS session"""
     def ntransfercmd(self, cmd, rest=None):
@@ -49,6 +50,7 @@ class Explicit_FTP_TLS(ftplib.FTP_TLS):
                                             server_hostname=self.host,
                                             session=self.sock.session)
         return conn, size
+
 
 class ImplicitFTPTLS(ftplib.FTP_TLS):
     """FTP_TLS subclass that automatically wraps sockets in SSL
@@ -89,7 +91,6 @@ def ftp(backend):
                 raise UserError(security)
         elif backend.ftp_encryption == "tls_explicit":
             ftp = Explicit_FTP_TLS()
-            # ftp = ftplib.FTP_TLS()
             prot_p = True
         with ftp as client:
             if security:

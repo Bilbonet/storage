@@ -18,6 +18,7 @@ try:
     import ftplib
 except ImportError as err:  # pragma: no cover
     _logger.debug(err)
+    raise ImportError("ftplib is required for FTP functionality")
 
 FTP_SECURITY_TO_PROTOCOL = {
     "tls": ssl.PROTOCOL_TLS,

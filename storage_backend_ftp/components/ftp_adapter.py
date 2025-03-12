@@ -61,6 +61,15 @@ class ImplicitFTPTLS(ftplib.FTP_TLS):
             value = self.context.wrap_socket(value)
         self._sock = value
 
+class Explicit_FTP_TLS(ftplib.FTP_TLS):
+    """Explicit FTPS, with shared TLS session"""
+    def ntransfercmd(self, cmd, rest=None):
+        conn, size = ftplib.FTP.ntransfercmd(self, cmd, rest)
+        if self._prot_p:
+            conn = self.context.wrap_socket(conn,
+                                            server_hostname=self.host,
+                                            session=self.sock.session)
+        return conn, size
 
 @contextmanager
 def ftp(backend):
@@ -78,7 +87,9 @@ def ftp(backend):
             if isinstance(security, str):
                 raise UserError(security)
         elif backend.ftp_encryption == "tls_explicit":
-            _ftp = ftplib.FTP_TLS()
+            # Due to a bug in ftplib
+            # https://bugs.python.org/issue31727
+            _ftp = Explicit_FTP_TLS()
             prot_p = True
         with _ftp as client:
             if security:
